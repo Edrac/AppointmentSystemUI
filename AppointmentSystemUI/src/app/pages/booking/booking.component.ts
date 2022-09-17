@@ -16,17 +16,31 @@ export class BookingComponent implements OnInit, OnDestroy {
   public message: string | undefined;
   public messageType: string = 'info';
   public appointments: Array<Appointments> = new Array();
+  private _currentMonth: Array<Date>;
+  // set to any since otherwise, the ngFor will give the following message:
+  // Type 'Date' is not assignable to type 'NgIterable<any> | null | undefined
+  public weekGrid: Array<any>;
+  public weekGridIt: number = 0;
+  public timeSlots: Array<TimeSlot> = new Array();
 
   constructor(
     private _formBuilder: FormBuilder,
     private _apiAppointmentService: ApiAppointmentService,
     private _router: Router,
   ) {
+    let today = new Date(Date.now());
+    this._currentMonth = this.getAllDaysInMonth(today.getFullYear(), today.getMonth());
+    this.fillGridDates(this._currentMonth);
+    this.weekGrid = this.createWeekGrid(this._currentMonth);
+    console.log(this._currentMonth);
+    this.fillTimeSlots();
+
     this.registrationForm = _formBuilder.group(
       {
         id: new FormControl('', [Validators.required, Validators.minLength(2)]),
       }
     );
+
   }
 
 
@@ -35,6 +49,70 @@ export class BookingComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+  }
+
+  getDayName(day: Date): string {
+    let locale = typeof navigator.language == 'string' ? navigator.language : navigator.language[0];
+    return day.toLocaleDateString(locale, { weekday: 'long' });
+  }
+
+  formatNumberToTime(t: number): string {
+    return t < 10 ? `0${t}` : `${t}`;
+  }
+
+  fillTimeSlots() {
+    let startMinutes = 8 * 60; // 8am
+    let endMinutes = 6 * 60; //6pm
+
+    let max = 24 * 60 - endMinutes;
+    let interval = 30;
+    for (let minutes = startMinutes; minutes < max;) {
+      let hours = Math.floor(minutes / 60);
+      let min = minutes % 60;
+      let from = `${this.formatNumberToTime(hours)}:${this.formatNumberToTime(min)}`;
+
+      minutes = minutes + interval;
+
+      hours = Math.floor(minutes / 60);
+      min = minutes % 60;
+      let to = `${this.formatNumberToTime(hours)}:${this.formatNumberToTime(min)}`;
+
+      let slot: TimeSlot = {
+        from: from,
+        to: to
+      }
+      this.timeSlots.push(slot);
+    }
+    console.log('timeslots', this.timeSlots);
+  }
+
+  createWeekGrid(datesArray: Array<Date>) {
+    let month = new Array();
+    let week = new Array();
+    for (let index = 0; index < datesArray.length; index++) {
+      if (week.length == 7) {
+        month.push(week);
+        week = new Array();
+      }
+      week.push(datesArray[index]);
+    }
+    console.log('week grid', month);
+
+    return month;
+  }
+
+  fillGridDates(datesArray: Array<Date>) {
+    // we find out which day is the first element in the array
+    let daysToFill = datesArray[0].getDay();
+    let missingDays: Array<Date> = new Array();
+    let d = new Date(datesArray[0]);
+    let fillingDate = d.setDate(d.getDate() - daysToFill);
+    for (let index = 0; index < daysToFill; index++) {
+      missingDays.push(new Date(fillingDate));
+      d = new Date(fillingDate);
+      fillingDate = d.setDate(d.getDate() + 1);
+    }
+    datesArray.unshift(...missingDays);
   }
 
   getAllDaysInMonth(year: number, month: number) {
@@ -66,4 +144,8 @@ export class BookingComponent implements OnInit, OnDestroy {
     // );
   }
 
+}
+interface TimeSlot {
+  from: string,
+  to: string,
 }

@@ -34,4 +34,24 @@
           (click)="message = ''"
           aria-label="Close"></button>
 </div>
-
+<div class="card">
+  <div class="card-body">
+    <table class="table">
+      <thead>
+        <tr>
+          <th *ngFor="let weekDays of weekGrid[weekGridIt]"
+              scope="col">
+            <p>{{getDayName(weekDays)}}</p>
+            <small>{{weekDays.toLocaleDateString()}}</small>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let timeSlot of timeSlots">
+          <th *ngFor="let week of weekGrid[weekGridIt]"
+              scope="row">{{timeSlot.from}} - {{timeSlot.to}}</th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
