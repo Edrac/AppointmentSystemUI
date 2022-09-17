@@ -10,10 +10,14 @@ const routes: Routes = [
   }, {
     path: 'dashboard',
     loadChildren: () => import('src/app/pages/dashboard/dashboard.module').then(m => m.DashboardModule),
-  },{
+  }, {
     path: 'registration',
     loadChildren: () => import('src/app/pages/registration/registration.module').then(m => m.RegistrationModule),
   }, {
+    path: 'current-appointments',
+    loadChildren: () => import('src/app/pages/current-appointments/current-appointments.module').then(m => m.CurrentAppointmentsModule),
+  },
+  {
     path: 'booking',
     loadChildren: () => import('src/app/pages/booking/booking.module').then(m => m.BookingModule),
   }
