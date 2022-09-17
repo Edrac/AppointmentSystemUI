@@ -1,9 +1,9 @@
 import { User } from "./user";
 
 export interface Appointments {
-  Id: string,
-  StartTime: Date,
-  EndTime: Date,
-  UserFK: string, //guid
-  User?: User | null,
+  id: string,
+  startTime: Date,
+  endTime: Date,
+  userFK: string, //guid
+  user?: User | null,
 }

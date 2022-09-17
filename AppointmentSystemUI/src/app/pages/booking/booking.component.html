@@ -3,7 +3,7 @@
     <h1>Booking</h1>
     <small class="text-muted">Please, provide your license plate</small>
     <form [formGroup]="registrationForm"
-          (ngSubmit)="save()">
+          (ngSubmit)="getCurrentBookings()">
       <div class="mb-3">
         <label for="id"
                class="form-label">
@@ -25,12 +25,15 @@
     </form>
   </div>
 </div>
-<div [class.show]="errorMessage != undefined && errorMessage != ''"
-     class="mt-5 alert alert-danger alert-dismissible fade"
+<div [class.show]="message != undefined && message != ''"
+     class="mt-5 alert alert-{{messageType}} alert-dismissible fade"
      role="alert">
-  {{errorMessage}}
+  {{message}}
   <button type="button"
           class="btn-close"
-          (click)="errorMessage = ''"
+          (click)="message = ''"
           aria-label="Close"></button>
 </div>
+<ul class="list-group">
+  <li class="list-group-item" *ngFor="let appointment of appointments">{{appointment.startTime}} - {{appointment.endTime}}</li>
+</ul>

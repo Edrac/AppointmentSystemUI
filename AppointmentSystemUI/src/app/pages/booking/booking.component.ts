@@ -13,7 +13,10 @@ import { Appointments } from 'src/app/shared/interfaces/appointments';
 export class BookingComponent implements OnInit {
   private _subscriptions: Subscription = new Subscription();
   public registrationForm: FormGroup;
-  public errorMessage: string | undefined;
+  public message: string | undefined;
+  public messageType: string = 'info';
+  public appointments: Array<Appointments> = new Array();
+
   constructor(
     private _formBuilder: FormBuilder,
     private _apiAppointmentService: ApiAppointmentService,
@@ -30,15 +33,20 @@ export class BookingComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  save(): void {
+  getCurrentBookings(): void {
     this._subscriptions.add(
       this._apiAppointmentService.getAppointments(this.registrationForm.controls['id'].value)
         .subscribe(
           (resp: Array<Appointments>) => {
-
+            if (resp?.length == 0) {
+              this.message = 'No appointments found';
+              this.messageType = 'info';
+            }
+            this.appointments = resp;
           },
           (error) => {
-            this.errorMessage = error;
+            this.message = error;
+            this.messageType = 'danger';
           }
         )
     );
