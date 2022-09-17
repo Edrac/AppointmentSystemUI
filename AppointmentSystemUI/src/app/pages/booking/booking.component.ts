@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -10,7 +10,7 @@ import { Appointments } from 'src/app/shared/interfaces/appointments';
   templateUrl: './booking.component.html',
   styleUrls: ['./booking.component.scss']
 })
-export class BookingComponent implements OnInit {
+export class BookingComponent implements OnInit, OnDestroy {
   private _subscriptions: Subscription = new Subscription();
   public registrationForm: FormGroup;
   public message: string | undefined;
@@ -33,23 +33,37 @@ export class BookingComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getCurrentBookings(): void {
-    this._subscriptions.add(
-      this._apiAppointmentService.getAppointments(this.registrationForm.controls['id'].value)
-        .subscribe(
-          (resp: Array<Appointments>) => {
-            if (resp?.length == 0) {
-              this.message = 'No appointments found';
-              this.messageType = 'info';
-            }
-            this.appointments = resp;
-          },
-          (error) => {
-            this.message = error;
-            this.messageType = 'danger';
-          }
-        )
-    );
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
+
+  getAllDaysInMonth(year: number, month: number) {
+    let date = new Date(year, month, 1);
+    let dates = [];
+    while (date.getMonth() === month) {
+      dates.push(new Date(date));
+      date.setDate(date.getDate() + 1);
+    }
+    return dates;
+  }
+
+  getAvailableDates(): void {
+    // this._subscriptions.add(
+    //   this._apiAppointmentService.getAppointments(this.registrationForm.controls['id'].value)
+    //     .subscribe(
+    //       (resp: Array<Appointments>) => {
+    //         if (resp?.length == 0) {
+    //           this.message = 'No appointments found';
+    //           this.messageType = 'info';
+    //         }
+    //         this.appointments = resp;
+    //       },
+    //       (error) => {
+    //         this.message = error;
+    //         this.messageType = 'danger';
+    //       }
+    //     )
+    // );
   }
 
 }

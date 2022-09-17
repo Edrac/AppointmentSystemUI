@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -10,7 +10,7 @@ import { Appointments } from 'src/app/shared/interfaces/appointments';
   templateUrl: './current-appointments.component.html',
   styleUrls: ['./current-appointments.component.scss']
 })
-export class CurrentAppointmentsComponent implements OnInit {
+export class CurrentAppointmentsComponent implements OnInit, OnDestroy {
 
   private _subscriptions: Subscription = new Subscription();
   public registrationForm: FormGroup;
@@ -32,6 +32,10 @@ export class CurrentAppointmentsComponent implements OnInit {
 
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
   getCurrentBookings(): void {

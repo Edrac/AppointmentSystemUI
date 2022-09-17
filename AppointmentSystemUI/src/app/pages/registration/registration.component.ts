@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -10,7 +10,7 @@ import { User } from 'src/app/shared/interfaces/user';
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss']
 })
-export class RegistrationComponent implements OnInit {
+export class RegistrationComponent implements OnInit, OnDestroy {
 
   private _subscriptions: Subscription = new Subscription();
   public registrationForm: FormGroup;
@@ -32,6 +32,11 @@ export class RegistrationComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
+  }
+
 
   save(): void {
     let user: User = {
