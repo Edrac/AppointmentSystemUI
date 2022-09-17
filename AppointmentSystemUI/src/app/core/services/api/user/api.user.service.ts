@@ -16,7 +16,7 @@ export class ApiUserService {
 
   getUser(): Observable<User> {
     let params: BaseURLParams = {
-      url: this._apiHttpService.createUrl('users'),
+      url: this._apiHttpService.createUrl('/Users'),
     }
     return this._apiHttpService.get(params);
   }

@@ -16,7 +16,7 @@ export class ApiAppointmentService {
 
   getAppointments(): Observable<Appointments> {
     let params: BaseURLParams = {
-      url: this._apiHttpService.createUrl('appointments'),
+      url: this._apiHttpService.createUrl('/Appointments'),
     }
     return this._apiHttpService.get(params);
   }
