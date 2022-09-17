@@ -3,8 +3,8 @@ import { environment } from '../../environments/environment';
 
 export abstract class Constants {
 
-  private static readonly API_DEV: string = 'http://localhost:49537/api';
-  private static readonly API_PROD: string = 'http://localhost:49537/api';
+  private static readonly API_DEV: string = 'https://localhost:44374/api';
+  private static readonly API_PROD: string = 'https://localhost:44374/api';
 
   private static readonly TESTING_MODE: boolean = false;
 
