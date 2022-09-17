@@ -2,14 +2,46 @@
   <div class="card p-4">
     <h1>Registration</h1>
     <small class="text-muted">Please fill out the following form</small>
-    <div class="card-body d-flex justify-content-evenly">
-      <form [formGroup]="registrationForm">
-
-      </form>
-      <button class="btn btn-primary"
-              [routerLink]="['/dashboard']">Cancel</button>
-      <button class="btn btn-primary"
-              (click)="save()">Save</button>
-    </div>
+    <form [formGroup]="registrationForm"
+          (ngSubmit)="save()">
+      <div class="mb-3">
+        <label for="firstName"
+               class="form-label">
+          First Name
+        </label>
+        <input id="firstName"
+               class="form-control"
+               type="text"
+               formControlName="firstName">
+      </div>
+      <div class="mb-3">
+        <label for="lastName"
+               class="form-label">
+          Last Name
+        </label>
+        <input id="lastName"
+               class="form-control"
+               type="text"
+               formControlName="lastName">
+      </div>
+      <div class="mb-3">
+        <label for="id"
+               class="form-label">
+          License Plate
+        </label>
+        <input id="id"
+               class="form-control"
+               type="text"
+               formControlName="id">
+      </div>
+      <div class="card-body d-flex justify-content-evenly">
+        <button class="btn btn-default"
+                type="button"
+                [routerLink]="['/dashboard']">Cancel</button>
+        <button class="btn btn-primary"
+                [disabled]="registrationForm.invalid"
+                type="submit">Save</button>
+      </div>
+    </form>
   </div>
 </div>

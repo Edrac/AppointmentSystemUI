@@ -1,8 +1,8 @@
 import { Appointments } from "./appointments";
 
 export interface User {
-  Id: string, //license plate
-  FirstName: string,
-  LastName: string,
+  id: string, //license plate
+  firstName: string,
+  lastName: string,
   Appointments?: Array<Appointments> | null,
 }
