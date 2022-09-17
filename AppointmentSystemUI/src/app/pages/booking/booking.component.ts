@@ -23,6 +23,9 @@ export class BookingComponent implements OnInit, OnDestroy {
   public weekGridIt: number = 0;
   public timeSlots: Array<TimeSlot> = new Array();
 
+  public showPrompt: boolean = false;
+  public selectedDate: { from: Date, to: Date } | undefined;
+
   constructor(
     private _formBuilder: FormBuilder,
     private _apiAppointmentService: ApiAppointmentService,
@@ -124,6 +127,34 @@ export class BookingComponent implements OnInit, OnDestroy {
       date.setDate(date.getDate() + 1);
     }
     return dates;
+  }
+
+  book(week: Date, timeSlot: TimeSlot) {
+    this.showPrompt = true;
+
+    let from = new Date(week);
+    let tsFrom = timeSlot.from.split(':');
+    from.setHours(parseInt(tsFrom[0]));
+    from.setMinutes(parseInt(tsFrom[1]));
+
+    let to = new Date(week);
+    let tsTo = timeSlot.to.split(':');
+    to.setHours(parseInt(tsTo[0]));
+    to.setMinutes(parseInt(tsTo[1]));
+
+    this.selectedDate = {
+      from: from,
+      to: to,
+    }
+  }
+
+  cancel() {
+    this.showPrompt = false;
+
+  }
+
+  getRangeDisplay():string{
+    return `from: ${this.selectedDate?.from.toDateString()} ${this.selectedDate?.from.toLocaleTimeString()} to: ${this.selectedDate?.to.toDateString()} ${this.selectedDate?.to.toLocaleTimeString()}`;
   }
 
   getAvailableDates(): void {

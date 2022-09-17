@@ -1,7 +1,40 @@
-<div class="d-flex justify-content-center pt-4">
+<div class="pt-3">
+  <div class="card"
+       *ngIf="!showPrompt">
+    <div class="card-body">
+      <h5 class="card-title">Available dates</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Please, select one of the available dates/times</h6>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th *ngFor="let weekDays of weekGrid[weekGridIt]"
+                scope="col">
+              <p>{{getDayName(weekDays)}}</p>
+              <small>{{weekDays.toLocaleDateString()}}</small>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let timeSlot of timeSlots">
+            <th *ngFor="let week of weekGrid[weekGridIt]"
+                scope="row">
+              <button class="btn btn-secondary"
+                      (click)="book(week, timeSlot)"
+                      [disabled]="timeSlot.disabled">{{timeSlot.from}} - {{timeSlot.to}}</button>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showPrompt"
+     class="d-flex justify-content-center pt-4">
   <div class="card p-4">
     <h1>Booking</h1>
-    <small class="text-muted">Please, provide your license plate to book an appointment</small>
+    <small class="text-muted">Please, provide your license plate to create the appointment</small>
+    <p>Booking time: {{getRangeDisplay()}}</p>
     <form [formGroup]="registrationForm"
           (ngSubmit)="getAvailableDates()">
       <div class="mb-3">
@@ -17,7 +50,7 @@
       <div class="card-body d-flex justify-content-evenly">
         <button class="btn btn-default"
                 type="button"
-                [routerLink]="['/dashboard']">Cancel</button>
+                (click)="cancel()">Cancel</button>
         <button class="btn btn-primary"
                 [disabled]="registrationForm.invalid"
                 type="submit">Submit</button>
@@ -25,7 +58,8 @@
     </form>
   </div>
 </div>
-<div [class.show]="message != undefined && message != ''"
+<div *ngIf="showPrompt"
+     [class.show]="message != undefined && message != ''"
      class="mt-5 alert alert-{{messageType}} alert-dismissible fade"
      role="alert">
   {{message}}
@@ -33,28 +67,4 @@
           class="btn-close"
           (click)="message = ''"
           aria-label="Close"></button>
-</div>
-<div class="card">
-  <div class="card-body">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th *ngFor="let weekDays of weekGrid[weekGridIt]"
-              scope="col">
-            <p>{{getDayName(weekDays)}}</p>
-            <small>{{weekDays.toLocaleDateString()}}</small>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let timeSlot of timeSlots">
-          <th *ngFor="let week of weekGrid[weekGridIt]"
-              scope="row">
-            <button class="btn btn-secondary"
-                    [disabled]="timeSlot.disabled">{{timeSlot.from}} - {{timeSlot.to}}</button>
-          </th>
-        </tr>
-      </tbody>
-    </table>
-  </div>
 </div>
