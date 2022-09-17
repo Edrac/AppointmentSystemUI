@@ -79,7 +79,8 @@ export class BookingComponent implements OnInit, OnDestroy {
 
       let slot: TimeSlot = {
         from: from,
-        to: to
+        to: to,
+        disabled: false,
       }
       this.timeSlots.push(slot);
     }
@@ -148,4 +149,5 @@ export class BookingComponent implements OnInit, OnDestroy {
 interface TimeSlot {
   from: string,
   to: string,
+  disabled: boolean,
 }

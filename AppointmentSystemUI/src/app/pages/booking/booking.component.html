@@ -36,7 +36,7 @@
 </div>
 <div class="card">
   <div class="card-body">
-    <table class="table">
+    <table class="table table-bordered">
       <thead>
         <tr>
           <th *ngFor="let weekDays of weekGrid[weekGridIt]"
@@ -49,7 +49,10 @@
       <tbody>
         <tr *ngFor="let timeSlot of timeSlots">
           <th *ngFor="let week of weekGrid[weekGridIt]"
-              scope="row">{{timeSlot.from}} - {{timeSlot.to}}</th>
+              scope="row">
+            <button class="btn btn-secondary"
+                    [disabled]="timeSlot.disabled">{{timeSlot.from}} - {{timeSlot.to}}</button>
+          </th>
         </tr>
       </tbody>
     </table>
