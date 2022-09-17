@@ -1,4 +1,14 @@
-<button class="btn btn-primary"
-        [routerLink]="['/registration']">Register</button>
-<button class="btn btn-primary"
-        [routerLink]="['/booking']">Book</button>
+<div class="d-flex justify-content-center pt-4">
+  <div class="card p-4">
+    <h1>Welcome!</h1>
+    <small class="text-muted">Please select "register" if you are not yet registered, otherwise, select "book" to book
+      an
+      appointment</small>
+    <div class="card-body d-flex justify-content-evenly">
+      <button class="btn btn-primary"
+              [routerLink]="['/registration']">Register</button>
+      <button class="btn btn-primary"
+              [routerLink]="['/booking']">Book</button>
+    </div>
+  </div>
+</div>
