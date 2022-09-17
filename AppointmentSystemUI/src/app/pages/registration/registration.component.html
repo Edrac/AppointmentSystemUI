@@ -45,3 +45,12 @@
     </form>
   </div>
 </div>
+<div [class.show]="errorMessage != undefined && errorMessage != ''"
+     class="mt-5 alert alert-danger alert-dismissible fade"
+     role="alert">
+  {{errorMessage}}
+  <button type="button"
+          class="btn-close"
+          (click)="errorMessage = ''"
+          aria-label="Close"></button>
+</div>
