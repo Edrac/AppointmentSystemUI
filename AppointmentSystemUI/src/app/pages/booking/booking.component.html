@@ -1,9 +1,9 @@
 <div class="d-flex justify-content-center pt-4">
   <div class="card p-4">
     <h1>Booking</h1>
-    <small class="text-muted">Please, provide your license plate</small>
+    <small class="text-muted">Please, provide your license plate to book an appointment</small>
     <form [formGroup]="registrationForm"
-          (ngSubmit)="getCurrentBookings()">
+          (ngSubmit)="getAvailableDates()">
       <div class="mb-3">
         <label for="id"
                class="form-label">
@@ -20,7 +20,7 @@
                 [routerLink]="['/dashboard']">Cancel</button>
         <button class="btn btn-primary"
                 [disabled]="registrationForm.invalid"
-                type="submit">Show current bookings</button>
+                type="submit">Submit</button>
       </div>
     </form>
   </div>
@@ -34,6 +34,4 @@
           (click)="message = ''"
           aria-label="Close"></button>
 </div>
-<ul class="list-group">
-  <li class="list-group-item" *ngFor="let appointment of appointments">{{appointment.startTime}} - {{appointment.endTime}}</li>
-</ul>
+
