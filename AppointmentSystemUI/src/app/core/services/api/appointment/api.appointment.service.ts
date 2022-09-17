@@ -14,11 +14,10 @@ export class ApiAppointmentService {
   ) { }
 
 
-  getAppointments(): Observable<Appointments> {
+  getAppointments(id: string): Observable<Array<Appointments>> {
     let params: BaseURLParams = {
-      url: this._apiHttpService.createUrl('Appointments'),
+      url: this._apiHttpService.createUrl(`Appointments/${id}`),
     }
     return this._apiHttpService.get(params);
   }
-
 }
