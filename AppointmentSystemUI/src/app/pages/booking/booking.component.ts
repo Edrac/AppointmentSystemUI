@@ -16,10 +16,10 @@ export class BookingComponent implements OnInit, OnDestroy {
   public message: string | undefined;
   public messageType: string = 'info';
   public appointments: Array<Appointments> = new Array();
-  private _currentMonth: Array<Date>;
+  private _currentMonth: Array<Date> = new Array();
   // set to any since otherwise, the ngFor will give the following message:
   // Type 'Date' is not assignable to type 'NgIterable<any> | null | undefined
-  public weekGrid: Array<any>;
+  public weekGrid: Array<any> = new Array();
   public weekGridIt: number = 0;
   public timeSlots: Array<TimeSlot> = new Array();
 
@@ -31,11 +31,7 @@ export class BookingComponent implements OnInit, OnDestroy {
     private _apiAppointmentService: ApiAppointmentService,
     private _router: Router,
   ) {
-    let today = new Date(Date.now());
-    this._currentMonth = this.getAllDaysInMonth(today.getFullYear(), today.getMonth());
-    this.fillGridDates(this._currentMonth);
-    this.weekGrid = this.createWeekGrid(this._currentMonth);
-    console.log(this._currentMonth);
+    this.setupGridDate(new Date(Date.now()));
     this.fillTimeSlots();
 
     this.registrationForm = _formBuilder.group(
@@ -47,11 +43,38 @@ export class BookingComponent implements OnInit, OnDestroy {
   }
 
 
+  setupGridDate(date: Date) {
+    this._currentMonth = this.getAllDaysInMonth(date.getFullYear(), date.getMonth());
+    this.fillGridDates(this._currentMonth);
+    this.weekGrid = this.createWeekGrid(this._currentMonth);
+  }
+
   ngOnInit(): void {
+    (<any>window).ctrl = this;
   }
 
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
+  }
+
+  previousWeek() {
+    if (this.weekGridIt == 0) {
+      //load previous month with the last week loaded
+      this.setupGridDate(this.weekGrid[this.weekGridIt][0]);
+      this.weekGridIt = this.weekGrid.length - 1;
+    } else {
+      this.weekGridIt--;
+    }
+  }
+
+  nextWeek() {
+    if (this.weekGridIt + 1 == this.weekGrid.length) {
+      //load next month with the first week loaded
+      this.setupGridDate(this.weekGrid[this.weekGridIt][6]);
+      this.weekGridIt = 0;
+    } else {
+      this.weekGridIt++;
+    }
   }
 
   getDayName(day: Date): string {
@@ -87,7 +110,6 @@ export class BookingComponent implements OnInit, OnDestroy {
       }
       this.timeSlots.push(slot);
     }
-    console.log('timeslots', this.timeSlots);
   }
 
   createWeekGrid(datesArray: Array<Date>) {
@@ -100,7 +122,6 @@ export class BookingComponent implements OnInit, OnDestroy {
       }
       week.push(datesArray[index]);
     }
-    console.log('week grid', month);
 
     return month;
   }
@@ -117,6 +138,13 @@ export class BookingComponent implements OnInit, OnDestroy {
       fillingDate = d.setDate(d.getDate() + 1);
     }
     datesArray.unshift(...missingDays);
+
+    //filling the days that are on the next month
+    d = datesArray[datesArray.length - 1];
+    for (; d.getDay() > 1;) {
+      d = new Date(d.setDate(d.getDate() + 1));
+      datesArray.push(d);
+    }
   }
 
   getAllDaysInMonth(year: number, month: number) {
@@ -150,10 +178,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 
   cancel() {
     this.showPrompt = false;
-
   }
 
-  getRangeDisplay():string{
+  getRangeDisplay(): string {
     return `from: ${this.selectedDate?.from.toDateString()} ${this.selectedDate?.from.toLocaleTimeString()} to: ${this.selectedDate?.to.toDateString()} ${this.selectedDate?.to.toLocaleTimeString()}`;
   }
 
